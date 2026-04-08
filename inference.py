@@ -18,7 +18,7 @@ client = OpenAI(
     api_key=HF_TOKEN,
 )
 
-ENV_BASE_URL = os.getenv("ENV_BASE_URL", "https://kush5699-data-validation-env.hf.space")
+ENV_BASE_URL = os.getenv("ENV_BASE_URL", "http://localhost:8000")
 
 TASKS = [
     {"task_name": "easy_missing_values", "seed": 42},
