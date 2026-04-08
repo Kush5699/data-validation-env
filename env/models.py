@@ -21,7 +21,7 @@ class DataCleanObservation(Observation):
     errors_fixed: int = Field(default=0)
     step_count: int = Field(default=0)
     max_steps: int = Field(default=20)
-    cumulative_reward: float = Field(default=0.0)
+    cumulative_reward: float = Field(default=0.01)
     last_action_result: str = Field(default="")
     task_hint: str = Field(default="")
     available_actions: List[str] = Field(
@@ -39,7 +39,7 @@ class DataCleanState(State):
     max_steps: int = Field(default=20)
     done: bool = Field(default=False)
     reward_history: List[float] = Field(default_factory=list)
-    cumulative_reward: float = Field(default=0.0)
+    cumulative_reward: float = Field(default=0.01)
     dataset: List[Dict[str, Any]] = Field(default_factory=list)
     ground_truth: List[Dict[str, Any]] = Field(default_factory=list)
     errors: List[Dict[str, Any]] = Field(default_factory=list)

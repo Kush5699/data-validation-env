@@ -39,7 +39,7 @@ class DataValidationEnvironment(Environment):
             max_steps=task["max_steps"],
             done=False,
             reward_history=[],
-            cumulative_reward=0.0,
+            cumulative_reward=0.01,
             dataset=task["dataset"],
             ground_truth=self._ground_truth,
             errors=self._errors,
@@ -58,8 +58,8 @@ class DataValidationEnvironment(Environment):
             errors_fixed=0,
             step_count=0,
             max_steps=task["max_steps"],
-            reward=0.0,
-            cumulative_reward=0.0,
+            reward=0.01,
+            cumulative_reward=0.01,
             done=False,
             last_action_result="Environment reset. Examine errors and fix them.",
             task_hint=task["hint"],
@@ -69,7 +69,7 @@ class DataValidationEnvironment(Environment):
 
     def step(self, action: DataCleanAction, **kwargs) -> DataCleanObservation:
         if self._state.done:
-            return self._make_observation(0.0, "Episode already done. Call reset().")
+            return self._make_observation(0.01, "Episode already done. Call reset().")
 
         self._state.step_count += 1
 
@@ -78,7 +78,7 @@ class DataValidationEnvironment(Environment):
         self._state.last_actions.append(action_key)
 
         if is_repeat:
-            reward = 0.0
+            reward = 0.01
             message = "Penalty: repeated identical action"
         else:
             reward, message, fixed = grade_action(
@@ -118,6 +118,9 @@ class DataValidationEnvironment(Environment):
 
         unfixed_errors = [e for e in self._errors if not e.get("fixed", False)]
 
+        clamped_reward = max(0.01, min(0.99, reward))
+        clamped_cumulative = max(0.01, min(0.99, self._state.cumulative_reward))
+
         return DataCleanObservation(
             task_name=self._state.task_name,
             task_description=self._task_info.get("description", ""),
@@ -128,8 +131,8 @@ class DataValidationEnvironment(Environment):
             errors_fixed=self._state.errors_fixed,
             step_count=self._state.step_count,
             max_steps=self._state.max_steps,
-            reward=reward,
-            cumulative_reward=self._state.cumulative_reward,
+            reward=clamped_reward,
+            cumulative_reward=clamped_cumulative,
             done=self._state.done,
             last_action_result=message,
             task_hint=self._task_info.get("hint", ""),
