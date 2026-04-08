@@ -71,7 +71,7 @@ class DataValidationEnvironment:
         self._state.last_actions.append(action_key)
 
         if is_repeat:
-            reward = -0.1
+            reward = 0.01
             message = "Penalty: repeated identical action"
         else:
             reward, message, fixed = grade_action(

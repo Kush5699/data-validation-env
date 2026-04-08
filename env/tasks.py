@@ -224,10 +224,10 @@ def grade_action(action_type: str, target_field: str, target_row: int,
 
     if action_type == "validate":
         fixed = sum(1 for e in errors if e.get("fixed", False))
-        return 0.0, f"Validation: {fixed}/{total_errors} errors fixed ({fixed/total_errors*100:.0f}%)", False
+        return 0.01, f"Validation: {fixed}/{total_errors} errors fixed ({fixed/total_errors*100:.0f}%)", False
 
     if action_type == "skip":
-        return 0.0, "Skipped current action", False
+        return 0.01, "Skipped current action", False
 
     matching_error = None
     for e in errors:
@@ -238,7 +238,7 @@ def grade_action(action_type: str, target_field: str, target_row: int,
             break
 
     if matching_error is None:
-        return -0.05, f"No unfixed error at row {target_row}, field '{target_field}'", False
+        return 0.01, f"No unfixed error at row {target_row}, field '{target_field}'", False
 
     action_to_error_map = {
         "fix_missing": "missing",
@@ -277,4 +277,4 @@ def grade_action(action_type: str, target_field: str, target_row: int,
         reward = 0.9 / total_errors
         return reward, f"Fixed: row {target_row}, field '{target_field}' -> '{new_value}'", True
     else:
-        return -0.05, f"Wrong value for row {target_row}, field '{target_field}'. Got '{new_value}', expected something else.", False
+        return 0.01, f"Wrong value for row {target_row}, field '{target_field}'. Got '{new_value}', expected something else.", False

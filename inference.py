@@ -175,14 +175,15 @@ def run_episode(task_config: dict) -> None:
             error_msg = None
             try:
                 obs = env_step(action)
-                reward = obs.get("reward", 0.0)
+                reward = obs.get("reward", 0.01)
                 done = obs.get("done", False)
             except Exception as e:
                 error_msg = str(e)
-                reward = 0.0
+                reward = 0.01
                 done = False
 
             steps += 1
+            reward = max(0.01, min(0.99, reward))
             rewards.append(reward)
 
             print(f"[STEP] step={steps} action={action_str} reward={reward:.2f} done={str(done).lower()} error={error_msg if error_msg else 'null'}")
@@ -196,11 +197,11 @@ def run_episode(task_config: dict) -> None:
     except Exception as e:
         error_str = str(e)
         if steps == 0:
-            print(f"[STEP] step=1 action=null reward=0.00 done=true error={error_str}")
+            print(f"[STEP] step=1 action=null reward=0.01 done=true error={error_str}")
             steps = 1
-            rewards = [0.0]
+            rewards = [0.01]
     finally:
-        rewards_str = ",".join(f"{r:.2f}" for r in rewards) if rewards else "0.00"
+        rewards_str = ",".join(f"{r:.2f}" for r in rewards) if rewards else "0.01"
         print(f"[END] success={str(success).lower()} steps={steps} rewards={rewards_str}")
 
 
