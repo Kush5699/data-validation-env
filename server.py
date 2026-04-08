@@ -29,6 +29,24 @@ class StepRequest(BaseModel):
     new_value: str = ""
 
 
+@app.get("/")
+async def root():
+    return {
+        "name": "Data Validation Pipeline",
+        "description": "An RL environment for training agents to clean and validate structured data",
+        "version": "1.0.0",
+        "endpoints": {
+            "health": "/health",
+            "reset": "POST /reset",
+            "step": "POST /step",
+            "state": "GET /state",
+            "tasks": "GET /tasks",
+        },
+        "tasks": get_task_names(),
+        "status": "running",
+    }
+
+
 @app.get("/health")
 async def health():
     return {"status": "healthy", "service": "data-validation-env"}
