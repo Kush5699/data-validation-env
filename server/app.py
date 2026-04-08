@@ -58,7 +58,11 @@ async def reset(request: ResetRequest = None):
         request = ResetRequest()
     try:
         obs = env.reset(task_name=request.task_name, seed=request.seed)
-        return obs.model_dump()
+        return {
+            "observation": obs.model_dump(),
+            "reward": obs.reward,
+            "done": obs.done,
+        }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -73,7 +77,11 @@ async def step(request: StepRequest):
             new_value=request.new_value,
         )
         obs = env.step(action)
-        return obs.model_dump()
+        return {
+            "observation": obs.model_dump(),
+            "reward": obs.reward,
+            "done": obs.done,
+        }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

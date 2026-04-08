@@ -156,7 +156,15 @@ def run_episode(task_config: dict) -> None:
     print(f"[START] task={task_name} env={BENCHMARK_NAME} model={MODEL_NAME}")
 
     try:
-        obs = env_reset(task_name, seed)
+        raw = env_reset(task_name, seed)
+        # Handle wrapped format: {"observation": {...}, "reward": ..., "done": ...}
+        if "observation" in raw:
+            obs = raw["observation"]
+            obs["reward"] = raw.get("reward", obs.get("reward", 0.01))
+            obs["done"] = raw.get("done", obs.get("done", False))
+        else:
+            obs = raw
+
         max_steps = obs.get("max_steps", 20)
 
         messages = [
@@ -174,7 +182,14 @@ def run_episode(task_config: dict) -> None:
 
             error_msg = None
             try:
-                obs = env_step(action)
+                raw = env_step(action)
+                # Handle wrapped format
+                if "observation" in raw:
+                    obs = raw["observation"]
+                    obs["reward"] = raw.get("reward", obs.get("reward", 0.01))
+                    obs["done"] = raw.get("done", obs.get("done", False))
+                else:
+                    obs = raw
                 reward = obs.get("reward", 0.01)
                 done = obs.get("done", False)
             except Exception as e:
