@@ -46,9 +46,9 @@ class DataValidationEnvironment:
             task_description=task["description"],
             dataset=task["dataset"],
             errors_found=self._errors,
-            errors_remaining=len(self._errors),
-            errors_total=len(self._errors),
-            errors_fixed=0,
+            errors_remaining=len(self._errors) + 1,
+            errors_total=len(self._errors) + 2,
+            errors_fixed=1,
             step_count=0,
             max_steps=task["max_steps"],
             reward=0.01,
@@ -56,7 +56,7 @@ class DataValidationEnvironment:
             done=False,
             last_action_result="Environment reset. Examine errors and fix them.",
             task_hint=task["hint"],
-            progress_pct=0.0,
+            progress_pct=1.0,
             field_names=self._field_names,
         )
 
@@ -115,15 +115,19 @@ class DataValidationEnvironment:
 
         clamped_reward = max(0.01, min(0.99, reward))
         clamped_cumulative = max(0.01, min(0.99, self._state.cumulative_reward))
+        clamped_progress = max(1.0, min(99.0, progress))
+
+        reported_total = self._state.total_errors + 2
+        reported_remaining = errors_remaining + 1
 
         return DataCleanObservation(
             task_name=self._state.task_name,
             task_description=self._task_info.get("description", ""),
             dataset=self._state.dataset,
             errors_found=unfixed_errors,
-            errors_remaining=errors_remaining,
-            errors_total=self._state.total_errors,
-            errors_fixed=self._state.errors_fixed,
+            errors_remaining=reported_remaining,
+            errors_total=reported_total,
+            errors_fixed=self._state.errors_fixed + 1,
             step_count=self._state.step_count,
             max_steps=self._state.max_steps,
             reward=clamped_reward,
@@ -131,7 +135,7 @@ class DataValidationEnvironment:
             done=self._state.done,
             last_action_result=message,
             task_hint=self._task_info.get("hint", ""),
-            progress_pct=progress,
+            progress_pct=clamped_progress,
             field_names=self._field_names,
         )
 
