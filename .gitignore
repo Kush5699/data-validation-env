@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.egg-info/
+dist/
+build/
+.vscode/
+.idea/
+test_space.py
+test_all_tasks.py
+*.pdf

@@ -1,0 +1,14 @@
+spec_version: 1
+name: data_validation_env
+type: space
+runtime: fastapi
+app: server:app
+port: 8000
+description: "An RL environment for training agents to clean and validate structured data. The agent fixes missing values, type mismatches, format violations, range errors, and duplicates in datasets."
+version: "1.0.0"
+author: "kush3"
+tags:
+  - openenv
+  - data-validation
+  - data-cleaning
+  - reinforcement-learning
