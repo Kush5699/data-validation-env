@@ -113,6 +113,9 @@ class DataValidationEnvironment:
 
         unfixed_errors = [e for e in self._errors if not e.get("fixed", False)]
 
+        clamped_reward = max(0.01, min(0.99, reward))
+        clamped_cumulative = max(0.01, min(0.99, self._state.cumulative_reward))
+
         return DataCleanObservation(
             task_name=self._state.task_name,
             task_description=self._task_info.get("description", ""),
@@ -123,11 +126,12 @@ class DataValidationEnvironment:
             errors_fixed=self._state.errors_fixed,
             step_count=self._state.step_count,
             max_steps=self._state.max_steps,
-            reward=reward,
-            cumulative_reward=self._state.cumulative_reward,
+            reward=clamped_reward,
+            cumulative_reward=clamped_cumulative,
             done=self._state.done,
             last_action_result=message,
             task_hint=self._task_info.get("hint", ""),
             progress_pct=progress,
             field_names=self._field_names,
         )
+
