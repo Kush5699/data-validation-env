@@ -274,7 +274,7 @@ def grade_action(action_type: str, target_field: str, target_row: int,
         else:
             dirty_dataset[target_row][target_field] = new_value
 
-        reward = 0.9 / total_errors
+        reward = 0.8 / total_errors
         return reward, f"Fixed: row {target_row}, field '{target_field}' -> '{new_value}'", True
     else:
         return 0.01, f"Wrong value for row {target_row}, field '{target_field}'. Got '{new_value}', expected something else.", False
