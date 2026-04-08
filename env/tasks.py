@@ -250,7 +250,7 @@ def grade_action(action_type: str, target_field: str, target_row: int,
 
     expected_error_type = action_to_error_map.get(action_type, "")
     if expected_error_type != matching_error["error_type"]:
-        return -0.05, f"Wrong action type '{action_type}' for error type '{matching_error['error_type']}'", False
+        return 0.01, f"Wrong action type '{action_type}' for error type '{matching_error['error_type']}'", False
 
     gt_value = ground_truth[target_row][target_field]
 

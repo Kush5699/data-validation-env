@@ -114,7 +114,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     response = {
                         "type": "reset",
                         "observation": obs.model_dump(),
-                        "reward": 0.0,
+                        "reward": 0.01,
                         "done": False,
                     }
                 elif method == "step":

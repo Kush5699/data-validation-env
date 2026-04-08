@@ -32,7 +32,7 @@ class DataValidationEnvironment:
             max_steps=task["max_steps"],
             done=False,
             reward_history=[],
-            cumulative_reward=0.0,
+            cumulative_reward=0.01,
             dataset=task["dataset"],
             ground_truth=self._ground_truth,
             errors=self._errors,
@@ -51,8 +51,8 @@ class DataValidationEnvironment:
             errors_fixed=0,
             step_count=0,
             max_steps=task["max_steps"],
-            reward=0.0,
-            cumulative_reward=0.0,
+            reward=0.01,
+            cumulative_reward=0.01,
             done=False,
             last_action_result="Environment reset. Examine errors and fix them.",
             task_hint=task["hint"],
@@ -62,7 +62,7 @@ class DataValidationEnvironment:
 
     def step(self, action: DataCleanAction) -> DataCleanObservation:
         if self._state.done:
-            return self._make_observation(0.0, "Episode already done. Call reset().")
+            return self._make_observation(0.01, "Episode already done. Call reset().")
 
         self._state.step_count += 1
 
